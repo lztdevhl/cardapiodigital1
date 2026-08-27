@@ -1,0 +1,46 @@
+generator client {
+ provider = "prisma-client-js"
+}
+datasource db {
+ provider = "postgresql"
+ url = env("DATABASE_URL")
+}
+model Admin {
+ id String @id @default(cuid())
+ email String @unique
+ passwordHash String
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+}
+model Category {
+ id String @id @default(cuid())
+ name String
+ slug String @unique
+ order Int @default(0)
+ active Boolean @default(true)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ products Product[]
+}
+model Product {
+ id String @id @default(cuid())
+ name String
+ description String @default("")
+ priceCents Int
+ imageUrl String
+ available Boolean @default(true)
+ featured Boolean @default(false)
+ categoryId String
+ category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+}
+model RestaurantSettings {
+ id String @id @default("default")
+ restaurantName String @default("Jantinha do Rogerio")
+ description String @default("")
+ whatsapp String @default("")
+ instagram String @default("")
+ address String @default("")
+ openingHours String @default("")
+}
