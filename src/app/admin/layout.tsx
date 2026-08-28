@@ -1,2 +1,3 @@
-import Link from "next/link";import {guard,signout} from "@/lib/auth";
-export default async function Layout({children}:{children:React.ReactNode}){await guard();return <><header className="bg-[#130708]"><nav className="container flex gap-5 overflow-x-auto py-4"><Link href="/admin">Resumo</Link><Link href="/admin/produtos">Produtos</Link><Link href="/admin/categorias">Categorias</Link><Link href="/admin/configuracoes">Configuracoes</Link><form action={signout}><button>Sair</button></form></nav></header>{children}</>}
+import {guard,signout} from "@/lib/auth";
+import {AdminShell} from "@/components/admin/admin-shell";
+export default async function Layout({children}:{children:React.ReactNode}){await guard();return <AdminShell signout={signout}>{children}</AdminShell>}

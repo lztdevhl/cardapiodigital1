@@ -1,181 +1,379 @@
-Quero que você desenvolva uma aplicação web completa de CARDÁPIO DIGITAL para um estabelecimento chamado:
-
-"Jantinha do Rogério"
+Quero que você faça uma REFATORAÇÃO COMPLETA DO FRONTEND deste projeto.
 
 IMPORTANTE:
-Este sistema NÃO é um delivery.
-NÃO quero criar um clone de iFood.
-NÃO quero carrinho.
-NÃO quero pedidos.
-NÃO quero checkout.
-NÃO quero pagamentos.
-NÃO quero cálculo de entrega.
+O backend já está funcional.
+O banco já está funcional.
+CRUD de produtos já está funcional.
+Categorias já estão funcionais.
+Upload de imagem já está funcional.
+Autenticação /admin já está funcional.
 
-O objetivo do projeto é exclusivamente permitir que clientes que estejam sentados nas mesas do estabelecimento acessem o cardápio pelo celular, através de um QR Code, visualizem as comidas, bebidas, preços, fotos e descrições.
+NÃO quero que você reescreva a aplicação.
+NÃO quero que altere banco, Prisma, rotas de API, autenticação ou regras de negócio sem necessidade.
 
-O estabelecimento também precisa de uma área administrativa privada em /admin para controlar completamente o conteúdo do cardápio.
+O objetivo desta tarefa é:
 
-==================================================
-1. STACK
-==================================================
+REFazer de verdade toda a experiência visual do projeto.
 
-Utilize:
+A interface atual está extremamente simples, parecendo apenas uma prova de conceito.
+Quero transformar isso em um produto visualmente profissional.
 
-- Next.js com App Router
-- TypeScript
-- Tailwind CSS
-- Prisma ORM
-- PostgreSQL
-- Cloudinary para armazenamento das imagens dos produtos
-- bcrypt para hash de senha
-- autenticação segura utilizando sessão/cookie httpOnly
-
-Não utilize Supabase.
-
-Estruture o projeto de forma profissional e preparada para deploy na Vercel.
-
-Não use dados mockados hardcoded no frontend.
-
-Todas as informações de produtos e categorias exibidas no cardápio público devem vir do PostgreSQL.
+Analise primeiro todo o projeto atual, identifique componentes e páginas existentes e preserve as funcionalidades.
 
 ==================================================
-2. IDENTIDADE VISUAL
+1. OBJETIVO DO PRODUTO
 ==================================================
 
-A identidade visual deve seguir a logo oficial da Jantinha do Rogério.
+Este projeto é o cardápio digital da:
 
-A logo estará em:
+Jantinha do Rogério
+
+É um cardápio acessado principalmente pelo celular através de QR Code nas mesas.
+
+NÃO É IFOOD.
+NÃO É DELIVERY.
+
+Não existem:
+- carrinho;
+- botão de comprar;
+- checkout;
+- pagamento;
+- quantidade;
+- pedido;
+- endereço de entrega.
+
+O cliente apenas:
+
+QR Code
+→ abre cardápio
+→ navega pelas categorias
+→ vê pratos
+→ vê fotos
+→ vê descrição
+→ vê preço
+→ toca em um item para ver detalhes
+
+Também existe um /admin para o proprietário gerenciar o cardápio.
+
+==================================================
+2. NÃO ALTERAR FUNCIONALIDADES
+==================================================
+
+MUITO IMPORTANTE:
+
+Antes de alterar qualquer arquivo, identifique como o sistema atual funciona.
+
+Preserve:
+
+- conexão PostgreSQL;
+- Prisma;
+- models existentes;
+- APIs;
+- autenticação;
+- login;
+- sessão;
+- CRUD;
+- upload;
+- Cloudinary;
+- criação de produtos;
+- edição;
+- exclusão;
+- disponibilidade;
+- destaque;
+- categorias;
+- configurações.
+
+Esta tarefa é principalmente FRONTEND/UI/UX.
+
+Se for necessário alterar estrutura de componentes para melhorar o frontend, tudo bem.
+
+Mas não quebre o funcionamento existente.
+
+==================================================
+3. PROBLEMA ATUAL
+==================================================
+
+O frontend atual tem aparência muito básica.
+
+Problemas que quero resolver:
+
+- páginas vazias demais;
+- falta hierarquia visual;
+- cardápio parece uma aplicação sem design;
+- cards extremamente simples;
+- navegação sem personalidade;
+- largura e espaçamento ruins;
+- tipografia sem personalidade;
+- imagem dos produtos mal aproveitada;
+- admin parece HTML estilizado;
+- não existe identidade visual forte;
+- não transmite comida/restaurante;
+- desktop está desperdiçando grande parte da tela;
+- não existe uma experiência mobile realmente pensada;
+- falta refinamento nos estados hover, active, loading e empty.
+
+NÃO faça apenas pequenos ajustes.
+
+Quero RECONSTRUIR A CAMADA VISUAL.
+
+==================================================
+4. IDENTIDADE DA JANTINHA DO ROGÉRIO
+==================================================
+
+Existe uma logo oficial.
+
+Localize a logo existente em /public.
+
+Provavelmente:
 
 /public/logo-jantinha-rogerio.png
 
-UTILIZE ESTA LOGO REAL.
-Não recrie a logo.
-Não tente redesenhá-la com CSS.
-Não substitua por texto estilizado.
+USE A LOGO REAL.
 
-Paleta aproximada da própria logo:
+Não redesenhe a logo.
+Não substitua por texto.
+Não gere outra logo.
 
---background: #090202
---surface: #130708
---surface-secondary: #1B0A0C
---wine: #571E22
---primary: #E66369
---primary-dark: #913035
---text: #F4F4F3
---text-muted: tons de cinza quente
+A identidade deve nascer dela.
 
-A interface deve ter forte predominância de:
+Cores principais aproximadas:
 
-- preto;
-- preto avermelhado;
-- vinho;
-- vermelho da identidade;
-- branco suave.
+background:
+#080404
 
-Evite transformar todo o sistema em vermelho.
+surface:
+#120708
 
-O vermelho deve funcionar principalmente como:
-- destaque;
-- preço;
-- indicadores;
-- botões importantes;
-- estados ativos;
-- pequenos elementos decorativos.
+surfaceElevated:
+#1A0C0E
+
+border:
+rgba(255,255,255,0.08)
+
+primary:
+#E66369
+
+primaryHover:
+#F17379
+
+wine:
+#571E22
+
+wineDark:
+#311115
+
+text:
+#F7F3F3
+
+textSecondary:
+#B9AEAE
+
+muted:
+#817575
+
+success:
+#58A66A
+
+danger:
+#E66369
+
+A aplicação deve ser escura, mas NÃO pode virar um bloco preto sem contraste.
+
+Crie profundidade utilizando:
+
+- superfícies;
+- bordas muito sutis;
+- diferentes níveis de preto/vinho;
+- espaçamento;
+- fotografia;
+- tipografia;
+- pequenos detalhes da marca.
+
+Evite gradientes coloridos exagerados.
 
 ==================================================
-3. DIREÇÃO DE DESIGN
+5. DIREÇÃO CRIATIVA
 ==================================================
 
-Quero um design feito por alguém com experiência sênior de UI/UX.
+Quero algo que pareça desenvolvido por um designer sênior especializado em produto digital + hospitality/food.
 
-NÃO quero aparência genérica de site criado por IA.
+Visual:
 
-Evite:
-- gradientes exagerados;
-- dezenas de cards flutuantes;
-- glassmorphism desnecessário;
-- sombras gigantes;
-- bordas arredondadas excessivas;
-- elementos neon;
-- emojis espalhados pela interface;
-- aparência de dashboard SaaS genérico;
-- aparência de iFood;
-- excesso de animações.
+- contemporâneo;
+- sofisticado;
+- escuro;
+- quente;
+- gastronômico;
+- artesanal;
+- jovem;
+- forte;
+- premium sem parecer restaurante de luxo.
 
-A identidade deve lembrar:
+A Jantinha do Rogério é comida de verdade, espetinho, jantinha, porções e bebida.
 
-- restaurante;
-- churrasco;
-- espetinhos;
-- comida noturna;
-- ambiente acolhedor;
-- marca local forte.
+A interface precisa transmitir isso.
 
-Quero algo moderno, mas que preserve personalidade de negócio gastronômico.
+Referências conceituais:
 
-Use bastante contraste entre:
-fundo escuro + comida + tipografia clara.
+- menus digitais premium;
+- hamburguerias modernas;
+- churrascarias contemporâneas;
+- bares/restaurantes urbanos;
+- apps de gastronomia bem desenhados.
 
-As FOTOS DOS PRATOS devem ser protagonistas do cardápio.
+NÃO copiar iFood.
 
-As animações devem ser muito discretas:
-- hover;
-- transições;
-- abertura de detalhes;
-- mudança de categoria.
+NÃO utilizar estética de dashboard SaaS no cardápio público.
+
+==================================================
+6. TIPOGRAFIA
+==================================================
+
+Melhore completamente a tipografia atual.
+
+Quero uma combinação com personalidade.
+
+Pode utilizar next/font.
+
+Sugestão:
+
+Headings:
+Barlow Condensed / Oswald / similar
+
+Body/interface:
+Manrope / Inter / similar
+
+Escolha uma combinação coerente.
+
+IMPORTANTE:
+
+Não use fontes extremamente decorativas nos textos dos produtos.
+
+A logo já possui personalidade suficiente.
+
+Utilize títulos com presença e corpo com excelente leitura.
+
+Exemplo:
+
+JANTINHA DO ROGÉRIO
+
+pode ter heading forte.
+
+Descrições devem ser extremamente legíveis.
+
+==================================================
+7. CRIAR DESIGN SYSTEM
+==================================================
+
+Centralize os estilos principais.
+
+Crie tokens para:
+
+- background;
+- surface;
+- surface elevated;
+- primary;
+- border;
+- text;
+- muted;
+- success;
+- danger;
+- radius;
+- spacing.
+
+Não espalhe hex colors aleatoriamente pelos componentes.
+
+Utilize CSS variables ou configuração equivalente.
+
+Crie consistência em:
+
+buttons
+inputs
+cards
+badges
+modals
+sheets
+dropdowns
+toasts
+navigation
+tables
+empty states
+
+==================================================
+8. CARDÁPIO PÚBLICO /
+==================================================
+
+Refaça completamente a página pública.
+
+Ela é a parte mais importante do sistema.
+
+MOBILE FIRST.
+
+==================================================
+9. HEADER DO CARDÁPIO
+==================================================
+
+No mobile quero um header que realmente apresente a marca.
+
+Exemplo de composição:
+
+--------------------------------
+             LOGO
+
+       Jantinha do Rogério
+
+  comida boa, do jeito certo.
+--------------------------------
+
+Não precisa utilizar exatamente esta frase caso não exista configuração para ela.
+
+Use os dados já existentes no sistema.
+
+A logo precisa ter tamanho suficiente para ser reconhecida.
+
+Não quero simplesmente:
+
+Jantinha do Rogério
+
+como texto perdido no topo.
+
+Utilize um bloco/hero compacto.
+
+Não faça um hero de 700px de altura.
+
+No celular, aproximadamente 180-260px pode ser suficiente dependendo da composição.
+
+Pode existir textura visual muito sutil usando CSS:
+- glow vinho muito discreto;
+- linhas;
+- ruído extremamente sutil;
+- borda da marca.
 
 Nada chamativo.
 
 ==================================================
-4. MOBILE FIRST
+10. INFORMAÇÕES DO ESTABELECIMENTO
 ==================================================
 
-O cardápio público será acessado principalmente pelo celular através de QR Code nas mesas.
+Logo abaixo ou dentro do header, se houver dados cadastrados, mostrar de forma elegante:
 
-Portanto:
+Horário
+Endereço
+Instagram
 
-MOBILE FIRST É OBRIGATÓRIO.
+Exemplo conceitual:
 
-Primeiro desenvolva a experiência pensando em telas de aproximadamente:
+Aberto hoje • 18h às 00h
 
-375px
-390px
-430px
-
-Depois adapte para tablet e desktop.
-
-No desktop, não estique os conteúdos de forma exagerada.
-
-Utilize um container elegante e confortável.
+sem transformar isso em uma sessão gigante.
 
 ==================================================
-5. CARDÁPIO PÚBLICO
+11. CATEGORIAS
 ==================================================
 
-A rota principal será:
+As categorias devem ser um dos principais elementos de navegação.
 
-/
-
-Não deve exigir login.
-
-Estruture a página aproximadamente desta maneira:
-
---------------------------------------
-
-HEADER
-
-Logo da Jantinha do Rogério centralizada ou muito bem integrada ao layout.
-
-Nome:
-Jantinha do Rogério
-
-Pode existir uma pequena frase institucional abaixo, mas não invente textos promocionais exagerados.
-
---------------------------------------
-
-NAVEGAÇÃO POR CATEGORIAS
-
-Criar uma navegação horizontal com as categorias cadastradas pelo administrador.
+Crie uma barra horizontal sticky no mobile.
 
 Exemplo:
 
@@ -183,868 +381,1061 @@ Jantinhas
 Espetinhos
 Porções
 Bebidas
-Sobremesas
 
-Esses nomes são apenas exemplos.
+Scroll horizontal sem scrollbar feia.
 
-As categorias reais devem vir do banco.
+Categoria ativa:
 
-No mobile essa barra poderá ter scroll horizontal.
+background vinho/vermelho
+texto claro
 
-Ela pode ficar sticky enquanto o usuário navega pelo cardápio.
+Categorias não ativas:
 
-Ao clicar em uma categoria:
-- rolar suavemente até a seção correspondente.
+surface
+texto secundário
 
-A categoria atual deve possuir estado visual ativo usando a cor da marca.
+O componente deve ser agradável ao toque.
 
---------------------------------------
+Não faça tabs gigantes.
 
-PRODUTOS
+Ao tocar:
+scroll suave até a categoria.
 
-Organizar os produtos por categoria.
+Se possível, atualize categoria ativa conforme scroll através de IntersectionObserver ou solução adequada.
 
-Cada categoria deve ter:
-
-Título
-Produtos pertencentes à categoria
-
-Cada produto deve apresentar:
-
-- foto;
-- nome;
-- pequena descrição;
-- preço;
-- disponibilidade.
-
-Exemplo visual conceitual:
-
-[ FOTO DO PRATO ]
-
-Jantinha Completa
-
-Arroz, feijão tropeiro,
-vinagrete e mandioca.
-
-R$ 25,00
-
---------------------------------------
-
-Não coloque botão "comprar".
-Não coloque botão "+".
-Não coloque "adicionar".
-Não coloque carrinho.
-
-Isso é um CARDÁPIO.
-
---------------------------------------
-
-No celular, priorize cards verticais ou uma composição que valorize muito bem a foto.
-
-Para itens menores, também pode ser utilizada uma composição horizontal:
-
-Nome e informações à esquerda
-Foto à direita
-
-Escolha a melhor composição baseado em UI/UX.
-
-Não deixe todas as seções visualmente idênticas se uma leve variação melhorar a experiência, mas preserve consistência.
+Não exagere na complexidade.
 
 ==================================================
-6. DETALHES DO PRODUTO
+12. DESTAQUES
 ==================================================
 
-Ao tocar em um produto, permitir visualizar mais detalhes.
+Se existirem produtos com featured === true:
 
-Pode ser através de:
+mostrar uma seção:
 
-- modal;
-OU
-- drawer/bottom sheet no mobile.
+Favoritos da casa
 
-Prefiro bottom sheet elegante no mobile.
+ou
+
+Mais pedidos
+
+Essa seção deve ter destaque visual.
+
+No mobile, pode funcionar como carousel horizontal usando CSS scroll snap.
+
+NÃO adicione biblioteca gigante apenas para carousel.
+
+Card de destaque pode ter:
+
+foto grande
+nome
+preço
+pequeno badge
+
+==================================================
+13. SEÇÕES DO CARDÁPIO
+==================================================
+
+Cada categoria precisa ter hierarquia clara.
+
+Exemplo:
+
+JANTINHAS
+
+Nossa seleção de jantinhas
+
+[produtos]
+
+Depois:
+
+ESPETINHOS
+
+[produtos]
+
+Utilize espaçamentos generosos.
+
+Não coloque linhas gigantes atravessando a página sem necessidade.
+
+==================================================
+14. CARDS DOS PRODUTOS
+==================================================
+
+Refaça completamente o ProductCard.
+
+A foto é extremamente importante.
+
+No mobile quero algo próximo de:
+
+┌───────────────────────────────┐
+│                               │
+│          FOTO GRANDE          │
+│                               │
+├───────────────────────────────┤
+│ Jantinha completa             │
+│                               │
+│ Arroz, tropeiro, vinagrete... │
+│                               │
+│ R$ 25,90                      │
+└───────────────────────────────┘
+
+OU uma composição horizontal muito bem feita:
+
+┌──────────────────────────────┐
+│ Jantinha completa      FOTO  │
+│ arroz, tropeiro...     FOTO  │
+│                       FOTO  │
+│ R$ 25,90              FOTO  │
+└──────────────────────────────┘
+
+Analise qual composição funciona melhor.
+
+Pode utilizar layouts diferentes:
+
+Destaques:
+cards verticais com imagem maior.
+
+Lista normal:
+cards horizontais mais compactos.
+
+Isso criará uma experiência mais editorial.
+
+==================================================
+15. IMAGENS
+==================================================
+
+As imagens atuais estão sendo subutilizadas.
+
+Utilize:
+
+next/image
+
+Com:
+
+object-fit: cover
+aspect ratio consistente
+border radius coerente
+lazy loading quando adequado
+
+No cardápio:
+
+produto sem imagem deve possuir placeholder bonito e coerente com a marca.
+
+Não mostrar ícone de imagem quebrada.
+
+Não distorcer imagens.
+
+==================================================
+16. PREÇO
+==================================================
+
+Preço deve ter bastante presença.
+
+Exemplo:
+
+R$ 25,90
+
+em primary #E66369
+
+Mas não exageradamente grande.
+
+Ele precisa ser facilmente identificado durante a leitura rápida do cardápio.
+
+==================================================
+17. DESCRIÇÃO
+==================================================
+
+Limitar descrição do card usando line-clamp.
+
+Exemplo:
+
+line-clamp-2
+
+Ao abrir o produto, mostrar descrição completa.
+
+==================================================
+18. DETALHE DO PRODUTO
+==================================================
+
+Ao clicar em um produto:
+
+MOBILE:
+abrir bottom sheet.
+
+DESKTOP:
+pode abrir dialog/modal elegante.
+
+Conteúdo:
+
+imagem grande
+nome
+descrição completa
+preço
+categoria
+disponibilidade
+
+Sem botões de comprar.
+
+Adicionar botão discreto:
+
+Fechar
+
+ou simplesmente X.
+
+Animação:
+
+200-300ms
+suave
+sem efeito exagerado.
+
+==================================================
+19. PRODUTO ESGOTADO
+==================================================
+
+Não remover.
 
 Mostrar:
 
-Foto maior
-Nome
-Descrição completa
-Preço
-Categoria
-
-Se estiver indisponível:
-
 ESGOTADO
 
-Não existem escolhas, carrinho ou adicionais nesta versão.
+Utilize:
+
+imagem levemente escurecida;
+badge;
+conteúdo com opacity reduzida.
+
+Mas ainda permita visualizar o item.
 
 ==================================================
-7. PRODUTO INDISPONÍVEL
+20. RESPONSIVIDADE PÚBLICA
 ==================================================
 
-O administrador poderá marcar um produto como indisponível.
+MOBILE:
 
-No cardápio público:
+375px
+390px
+430px
 
-não apague o produto.
+Tablet:
 
-Exiba-o de maneira visualmente atenuada com um indicador:
+768px+
 
-"ESGOTADO"
+Desktop:
 
-A foto pode ficar levemente dessaturada/escurecida.
+1024px+
 
-==================================================
-8. RODAPÉ
-==================================================
+No desktop não quero todo conteúdo grudado na esquerda como está agora.
 
-Criar um rodapé pequeno e elegante.
+Crie container centralizado.
 
-Preparar suporte para informações do estabelecimento, como:
+Algo como:
 
-- endereço;
-- horário;
-- Instagram;
-- WhatsApp.
+max-width: 1180px
 
-Não deixe essas informações hardcoded.
+com margens automáticas.
 
-Devem vir das configurações do estabelecimento.
+Produtos podem virar:
 
-==================================================
-9. ÁREA ADMINISTRATIVA
-==================================================
+2 colunas
 
-Criar:
+ou
 
-/admin/login
+3 colunas em determinadas seções.
 
-e
-
-/admin
-
-Toda rota /admin, com exceção de /admin/login, deve exigir autenticação.
-
-Usuários não autenticados devem ser redirecionados para:
-
-/admin/login
-
-O cardápio público / continua totalmente aberto.
+Não crie cards gigantes porque existe espaço.
 
 ==================================================
-10. LOGIN ADMINISTRATIVO
+21. FOOTER
 ==================================================
 
-Criar login simples através de:
+Criar footer realmente acabado.
 
-email
-senha
+Pode conter:
 
-A senha NUNCA deve ficar em texto puro no banco.
+logo pequena
+nome do estabelecimento
+endereço
+horário
+Instagram
+WhatsApp
 
-Utilize bcrypt.
+Somente mostrar dados existentes.
 
-Utilize sessão segura.
+Visual:
 
-Cookie deve ser:
+sutil
+dark
+separação através de border-top
 
-httpOnly
-secure em produção
-sameSite adequado
-
-Não implemente cadastro público de administrador.
-
-Inicialmente haverá apenas um administrador.
-
-Prepare uma maneira segura de criar o primeiro administrador via seed ou script.
+Não precisa ser enorme.
 
 ==================================================
-11. DASHBOARD /ADMIN
+22. /ADMIN
 ==================================================
 
-Não quero um dashboard cheio de gráficos inúteis.
+Agora refaça também completamente o painel administrativo.
 
-Quero algo objetivo.
+O admin atual parece apenas uma navbar + textos.
 
-Exibir aproximadamente:
+Quero um painel profissional e muito fácil para alguém não técnico utilizar.
 
-"Cardápio"
+O admin NÃO precisa ter a mesma estética editorial do cardápio.
 
-Quantidade de produtos
-Quantidade de categorias
-Produtos disponíveis
-Produtos esgotados
+Pode ser mais funcional.
 
-E uma ação principal:
+Mas deve seguir as cores da marca.
 
-+ Adicionar produto
+==================================================
+23. ADMIN DESKTOP
+==================================================
 
-Também pode existir uma lista de produtos recentemente alterados.
+No desktop:
 
-Sidebar ou navegação:
+crie sidebar lateral.
 
-Visão geral
+Layout:
+
+┌─────────────┬─────────────────────────┐
+│ LOGO        │                         │
+│             │      CONTEÚDO           │
+│ Resumo      │                         │
+│ Produtos    │                         │
+│ Categorias  │                         │
+│ Config.     │                         │
+│             │                         │
+│ Cardápio ↗  │                         │
+│             │                         │
+│ Sair        │                         │
+└─────────────┴─────────────────────────┘
+
+Sidebar:
+
+220-260px.
+
+Não use navegação horizontal como atualmente.
+
+Sidebar com:
+
+logo
+Resumo
 Produtos
 Categorias
 Configurações
+
+separador
+
+Ver cardápio
+
 Sair
 
-No mobile, transformar isso em navegação adequada.
+Item ativo deve ficar muito claro.
 
 ==================================================
-12. GERENCIAMENTO DE PRODUTOS
+24. ADMIN MOBILE
 ==================================================
+
+No mobile:
+
+NÃO mostrar sidebar fixa.
 
 Criar:
 
-/admin/produtos
+topbar
+menu drawer
 
-Mostrar todos os produtos.
+ou navegação mobile apropriada.
 
-Permitir:
+Precisa ser possível administrar o cardápio pelo celular.
 
-- pesquisar por nome;
-- filtrar por categoria;
-- visualizar preço;
-- visualizar disponibilidade;
-- editar;
-- excluir;
-- alterar disponibilidade rapidamente.
+==================================================
+25. DASHBOARD ADMIN
+==================================================
+
+/admin
 
 Criar:
 
-/admin/produtos/novo
+header:
 
-Formulário:
+Boa noite
+Jantinha do Rogério
 
-Nome *
-Descrição
-Preço *
-Categoria *
-Foto *
-Disponível
+ou simplesmente:
+
+Resumo do cardápio
+
+Depois cards pequenos:
+
+Produtos
+24
+
+Categorias
+5
+
+Disponíveis
+21
+
+Esgotados
+3
+
+Sem gráficos.
+
+Depois:
+
+Produtos recentes
+
+e
+
+botão:
+
++ Novo produto
+
+==================================================
+26. PÁGINA DE PRODUTOS ADMIN
+==================================================
+
+Refazer /admin/produtos.
+
+Header:
+
+Produtos
+
+"Gerencie os itens exibidos no seu cardápio."
+
+[ + Novo produto ]
+
+Depois toolbar:
+
+[ buscar produtos... ]
+
+[ Todas categorias ▼ ]
+
+[ Disponibilidade ▼ ]
+
+No desktop usar lista/tabela customizada.
+
+Colunas:
+
+Produto
+Categoria
+Preço
+Status
 Destaque
+Ações
 
-Também criar edição em:
+Produto deve apresentar:
 
-/admin/produtos/[id]
+thumbnail
+nome
+pequena descrição
 
-O administrador deve conseguir:
+Exemplo:
 
-- alterar nome;
-- alterar descrição;
-- alterar preço;
-- trocar foto;
-- alterar categoria;
-- marcar disponível;
-- marcar indisponível;
-- marcar como destaque;
-- remover destaque.
+[foto] Jantinha completa
+       Arroz, tropeiro...
 
-Ao salvar:
+Jantinhas
 
-as alterações devem aparecer automaticamente no cardápio público através do banco de dados.
+R$25,90
 
-Não quero precisar alterar código ou fazer novo deploy para mudar preços ou produtos.
+● Disponível
+
+⋯
 
 ==================================================
-13. UPLOAD DE FOTOS
+27. AÇÕES DO PRODUTO
 ==================================================
 
-Implementar upload REAL.
+NÃO quero:
 
-Não salvar base64 no PostgreSQL.
+Esgotar    Excluir
 
-Utilizar Cloudinary.
+como textos soltos no canto como está atualmente.
 
-Fluxo:
+Utilize menu de contexto através de:
 
-administrador seleciona imagem
-→ upload
-→ Cloudinary
-→ receber URL
-→ armazenar URL no campo imageUrl do produto
+⋯
 
-Durante upload:
-- mostrar loading;
-- mostrar preview;
-- informar erro se falhar;
-- impedir envio duplicado.
+Ao abrir:
 
-Ao editar um produto, permitir trocar a imagem.
-
-==================================================
-14. EXCLUSÃO
-==================================================
-
-Ao clicar em excluir produto:
-
-não excluir imediatamente.
-
-Abrir confirmação:
-
-"Tem certeza que deseja excluir Jantinha Completa?"
-
-Cancelar
+Editar
+Marcar esgotado
+Destacar
 Excluir
 
-Ação destrutiva deve possuir destaque visual adequado.
+Se ações principais forem importantes, podem existir botões bem desenhados.
 
-Faça o mesmo com categorias.
+Excluir deve ser vermelho/destrutivo.
 
 ==================================================
-15. CATEGORIAS
+28. ADMIN NO MOBILE
 ==================================================
 
-Criar:
+No celular NÃO utilize tabela espremida.
+
+Transforme itens em cards:
+
+[foto] Produto
+       Categoria
+       R$25,90
+
+● Disponível                 ⋯
+
+==================================================
+29. FORMULÁRIO DE PRODUTO
+==================================================
+
+Refaça completamente o formulário de criar/editar produtos.
+
+Crie uma hierarquia profissional.
+
+Desktop:
+
+pode ter:
+
+coluna principal
++
+sidebar
+
+Exemplo:
+
+INFORMAÇÕES
+Nome
+Descrição
+Categoria
+
+PREÇO
+Preço
+
+IMAGEM
+upload
+
+Sidebar:
+
+Disponibilidade
+Destaque
+
+Salvar produto
+
+Mobile:
+
+tudo em uma coluna.
+
+Input precisa ter:
+
+label
+helper
+error
+focus
+disabled
+
+Não use inputs visualmente crus.
+
+==================================================
+30. UPLOAD DE FOTO NO ADMIN
+==================================================
+
+O upload deve parecer um produto acabado.
+
+Antes da foto:
+
+┌───────────────────────┐
+│                       │
+│    Adicionar foto     │
+│                       │
+│ JPG, PNG ou WEBP      │
+│                       │
+└───────────────────────┘
+
+Após upload:
+
+mostrar preview.
+
+Possibilitar:
+
+Trocar imagem
+Remover
+
+sem quebrar lógica de upload atual.
+
+==================================================
+31. CATEGORIAS ADMIN
+==================================================
 
 /admin/categorias
 
-Administrador deve poder:
+Criar cabeçalho:
 
-- criar categoria;
-- renomear categoria;
-- excluir categoria;
-- ativar/desativar;
-- alterar ordem de exibição.
+Categorias
+"Organize as seções do seu cardápio."
 
-Campos:
+[ Nova categoria ]
 
-id
-name
-slug
-order
-active
+Cada categoria:
 
-As categorias precisam controlar automaticamente a organização do cardápio público.
+nome
+quantidade de produtos, se possível obter sem modificar demais a lógica
+status
+ordem
+ações
 
-Exemplo:
+Se já houver suporte para order, permitir alterar.
 
-order 1 -> Jantinhas
-order 2 -> Espetinhos
-order 3 -> Porções
-order 4 -> Bebidas
-
-Não deixe categorias hardcoded.
+Não crie funcionalidade de drag/drop se isso exigir dependência desnecessária.
 
 ==================================================
-16. DESTAQUES
+32. CONFIGURAÇÕES
 ==================================================
-
-Produtos podem possuir:
-
-featured: true/false
-
-Se existirem produtos destacados, criar uma seção no início:
-
-"Mais pedidos"
-OU
-"Destaques da casa"
-
-Não confunda isso com categoria.
-
-Essa seção deve ser gerada a partir de:
-
-Product.featured === true
-
-Se nenhum produto estiver destacado, simplesmente não renderizar essa seção.
-
-==================================================
-17. CONFIGURAÇÕES
-==================================================
-
-Criar:
 
 /admin/configuracoes
 
-Permitir editar:
+Dividir em sessões:
 
-Nome do estabelecimento
-Descrição curta
-WhatsApp
-Instagram
-Endereço
-Horário de funcionamento
+Informações do estabelecimento
 
-A logo pode inicialmente permanecer como arquivo do projeto.
+Contato
 
-Todas as outras informações devem vir do banco.
+Funcionamento
 
-==================================================
-18. MODELAGEM PRISMA
-==================================================
+Campos com excelente design.
 
-Crie uma modelagem Prisma profissional.
+Botão:
 
-No mínimo:
-
-Admin
-Category
-Product
-RestaurantSettings
-
-Estrutura aproximada:
-
-Admin
-- id
-- email unique
-- passwordHash
-- createdAt
-- updatedAt
-
-Category
-- id
-- name
-- slug unique
-- order
-- active
-- createdAt
-- updatedAt
-- products
-
-Product
-- id
-- name
-- description
-- price
-- imageUrl
-- available
-- featured
-- categoryId
-- category
-- createdAt
-- updatedAt
-
-RestaurantSettings
-- id
-- restaurantName
-- description
-- whatsapp
-- instagram
-- address
-- openingHours
-- createdAt
-- updatedAt
-
-Escolha Decimal ou a melhor abordagem segura para preço.
-
-Não use float de maneira insegura para valores monetários.
-
-Configure relacionamentos, índices e constraints adequadamente.
+Salvar alterações
 
 ==================================================
-19. ESTRUTURA DO PROJETO
+33. LOGIN
 ==================================================
 
-Organize aproximadamente:
+Refazer /admin/login.
 
-app/
-├── page.tsx
-│
-├── admin/
-│   ├── login/
-│   ├── page.tsx
-│   │
-│   ├── produtos/
-│   │   ├── page.tsx
-│   │   ├── novo/
-│   │   └── [id]/
-│   │
-│   ├── categorias/
-│   └── configuracoes/
-│
-├── api/
-│   ├── auth/
-│   ├── products/
-│   ├── categories/
-│   ├── settings/
-│   └── upload/
-│
-components/
-├── menu/
-├── admin/
-└── ui/
-│
-lib/
-├── prisma.ts
-├── auth.ts
-├── cloudinary.ts
-├── utils.ts
-└── validations/
-│
-prisma/
-├── schema.prisma
-└── seed.ts
+Quero uma tela de login realmente bem feita.
 
-Não siga esta estrutura cegamente caso exista uma arquitetura melhor.
+Desktop:
 
-Priorize código sustentável.
+pode ser split screen.
+
+Lado esquerdo:
+
+marca / composição visual / logo.
+
+Lado direito:
+
+Entrar no painel
+
+Email
+Senha
+
+Entrar
+
+Mobile:
+
+apenas uma composição central elegante.
+
+Não crie login genérico azul/branco.
+
+Use identidade da Jantinha do Rogério.
 
 ==================================================
-20. VALIDAÇÃO
+34. BOTÕES
 ==================================================
 
-Utilize validação tanto no frontend quanto no backend.
+Criar variantes:
 
-Pode utilizar Zod.
+primary
+secondary
+ghost
+danger
 
-Produto:
+Primary:
 
-nome obrigatório
-preço válido e maior que zero
-categoria válida
-URL/imagem válida
+background #E66369
+texto escuro ou branco dependendo do contraste final.
 
-Categoria:
+Secondary:
 
-nome obrigatório
-slug válido
+surface elevated
+border
 
-Não confie apenas no frontend.
+Ghost:
 
-==================================================
-21. FEEDBACK DA INTERFACE
-==================================================
+transparent
 
-Toda operação administrativa deve apresentar feedback.
+Danger:
 
-Exemplos:
+danger
 
-"Produto criado com sucesso."
-"Alterações salvas."
-"Produto excluído."
-"Não foi possível salvar o produto."
+Estados:
 
-Utilize toast discreto.
-
-Botões precisam ter estado:
-
-normal
 hover
-loading
+focus
+active
 disabled
-
-Evite double submit.
+loading
 
 ==================================================
-22. ESTADOS VAZIOS
+35. BORDAS E RADIUS
 ==================================================
 
-Criar estados vazios bonitos.
+Evite exagerar em border-radius.
+
+Não quero tudo com rounded-3xl.
+
+Sugestão:
+
+cards:
+12-16px
+
+buttons:
+8-10px
+
+inputs:
+8-10px
+
+badges:
+6px
+
+Algumas fotos de destaque podem ter radius maior.
+
+==================================================
+36. SOMBRAS
+==================================================
+
+Evite box-shadow gigantes.
+
+Em UI dark, priorize:
+
+borders
+surfaces
+contrast
+
+Use shadow apenas quando necessário, como:
+
+modal
+sheet
+dropdown
+
+==================================================
+37. ANIMAÇÕES
+==================================================
+
+Muito discretas.
+
+150-300ms.
+
+Utilize CSS transitions.
+
+Não instalar Framer Motion apenas para hover.
+
+Pode usar animações para:
+
+bottom sheet
+modal
+menu mobile
+hover
+tabs
+
+Sem animações decorativas exageradas.
+
+==================================================
+38. EMPTY STATES
+==================================================
+
+Refaça empty states.
+
+Admin sem produtos:
+
+"Seu cardápio ainda está vazio."
+
+"Cadastre o primeiro item para começar."
+
+[ Adicionar produto ]
+
+Admin sem categorias:
+
+"Nenhuma categoria criada."
+
+Public sem produtos:
+
+não deixar tela preta completamente vazia.
+
+Mostrar um estado elegante:
+
+"Nosso cardápio está sendo atualizado."
+
+==================================================
+39. FEEDBACK
+==================================================
+
+Melhorar feedback visual existente:
+
+toast
+loading
+skeleton
+erro
+sucesso
 
 Exemplo:
 
-"Nenhum produto cadastrado."
+Produto atualizado.
 
-[ Adicionar primeiro produto ]
+Categoria criada.
 
-No cardápio público:
-
-se uma categoria não possuir produtos ativos, não precisa exibir uma seção vazia.
+Produto removido.
 
 ==================================================
-23. CARREGAMENTO
+40. ACESSIBILIDADE
 ==================================================
 
-Utilize skeletons discretos onde fizer sentido.
+Verificar:
 
-Não coloque spinners gigantes no centro da tela.
-
-==================================================
-24. RESPONSIVIDADE DO ADMIN
-==================================================
-
-O administrador provavelmente também utilizará celular.
-
-Portanto /admin precisa funcionar muito bem em:
-
-mobile
-tablet
-desktop
-
-Não faça tabelas impossíveis de usar no celular.
-
-Em telas menores, produtos podem virar cards administrativos.
+contraste
+tab navigation
+focus-visible
+aria-labels
+labels
+alt
+button semantics
+dialog semantics
 
 ==================================================
-25. SEGURANÇA
+41. COMPONENTIZAÇÃO
 ==================================================
 
-Muito importante:
+Durante a refatoração, crie componentes reutilizáveis.
 
-- proteger /admin;
-- validar sessão no servidor;
-- nunca confiar somente em proteção frontend;
-- validar todas as mutations;
-- nunca retornar passwordHash;
-- usar variáveis de ambiente;
-- proteger endpoints administrativos;
-- sanitizar entradas onde necessário;
-- não expor credenciais;
-- não colocar segredos no código.
+Possível organização:
 
-==================================================
-26. VARIÁVEIS DE AMBIENTE
-==================================================
+components/
+  menu/
+    MenuHeader
+    CategoryNavigation
+    FeaturedProducts
+    MenuSection
+    ProductCard
+    ProductDetail
+    RestaurantFooter
 
-Criar:
+  admin/
+    AdminSidebar
+    AdminMobileNavigation
+    AdminHeader
+    MetricCard
+    ProductAdminCard
+    ProductTable
+    ProductForm
+    CategoryItem
+    EmptyState
 
-.env.example
+  ui/
+    Button
+    Input
+    Textarea
+    Select
+    Badge
+    Modal
+    Sheet
+    DropdownMenu
+    Toast
+    Skeleton
 
-Com algo semelhante a:
-
-DATABASE_URL=
-SESSION_SECRET=
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-ADMIN_EMAIL=
-ADMIN_PASSWORD=
-
-Nunca colocar valores reais no repositório.
-
-==================================================
-27. BANCO E MIGRATIONS
-==================================================
-
-Configure Prisma corretamente.
-
-Prepare:
-
-npx prisma migrate dev
-
-E um seed para criar:
-
-- administrador inicial;
-- configurações iniciais do restaurante.
-
-NÃO crie dezenas de produtos fake.
-
-Quero iniciar o cardápio real vazio para depois cadastrar os produtos verdadeiros do cliente pelo /admin.
+Não precisa seguir exatamente esses nomes se a arquitetura existente indicar algo melhor.
 
 ==================================================
-28. PERFORMANCE
+42. CÓDIGO
 ==================================================
 
-As fotos podem ser pesadas.
+Não quero uma página gigantesca em page.tsx.
 
-Portanto:
+Separe componentes.
 
-- use next/image;
-- dimensões adequadas;
-- lazy loading;
-- otimização;
-- placeholders quando adequado.
+Não utilize:
 
-O cardápio precisa abrir rapidamente no 4G.
+any
 
-Isso é extremamente importante porque será acessado por QR Code.
+sem necessidade.
 
-==================================================
-29. SEO / METADATA
-==================================================
+Não duplique estilos.
 
-Configure metadata básica:
+Não crie componentes inúteis de duas linhas apenas por abstração.
 
-title:
-Jantinha do Rogério | Cardápio
-
-description:
-Cardápio digital da Jantinha do Rogério.
-
-Configure favicon se existir material apropriado.
+Mantenha equilíbrio.
 
 ==================================================
-30. ACESSIBILIDADE
+43. NÃO CRIAR DADOS FALSOS
 ==================================================
 
-Garanta:
+MUITO IMPORTANTE:
 
-contraste adequado
-labels em formulários
-focus states
-alt nas imagens
-botões semanticamente corretos
-navegação minimamente acessível
+NÃO crie:
 
-==================================================
-31. REGRAS IMPORTANTES DE ESCOPO
-==================================================
+produtos fake
+categorias fake
+preços fake
+dados mockados
 
-NÃO implementar:
+Continue utilizando exatamente os registros do banco atual.
 
-- carrinho;
-- sistema de pedidos;
-- delivery;
-- endereço do cliente;
-- pagamento;
-- Pix;
-- cupons;
-- conta de cliente;
-- cadastro de cliente;
-- acompanhamento de pedido;
-- sistema de garçom;
-- reservas;
-- fidelidade.
+Eu já estou utilizando produtos de teste no banco.
 
-Não invente funcionalidades.
-
-Esse produto é:
-
-CARDÁPIO DIGITAL + PAINEL PARA GERENCIAR O CARDÁPIO.
+Não apague esses dados.
 
 ==================================================
-32. EXPERIÊNCIA ESPERADA
+44. NÃO ALTERAR IMAGENS DO BANCO
 ==================================================
 
-Fluxo do cliente:
+As imagens existentes são intencionais para teste.
 
-QR Code da mesa
-↓
-abre /
-↓
-vê a marca Jantinha do Rogério
-↓
-navega pelas categorias
-↓
-visualiza fotos, pratos, descrições e preços
-↓
-toca em um produto para visualizar detalhes
+Não substitua URLs.
 
-Fim.
+Não remova arquivos.
 
-Fluxo do proprietário:
+Apenas melhore a forma como são apresentadas.
 
-/admin/login
-↓
-login
-↓
+==================================================
+45. PRIMEIRO ANALISE
+==================================================
+
+Antes de escrever código:
+
+1. leia a estrutura atual;
+2. identifique todas as páginas;
+3. identifique componentes existentes;
+4. identifique como produtos chegam ao frontend;
+5. identifique APIs utilizadas;
+6. identifique autenticação;
+7. identifique upload;
+8. identifique estilos globais;
+9. identifique dependências disponíveis.
+
+Depois escreva um plano curto.
+
+Só depois comece a implementação.
+
+==================================================
+46. PRIORIDADE
+==================================================
+
+Faça nessa ordem:
+
+1. Design system/global CSS
+2. componentes UI base
+3. cardápio público mobile
+4. cardápio público desktop
+5. detalhe de produto
+6. admin shell/sidebar
+7. admin produtos
+8. formulário de produto
+9. categorias
+10. configurações
+11. login
+12. estados/loading
+13. responsividade
+14. acessibilidade
+15. revisão
+
+==================================================
+47. NÃO PARE NO MEIO
+==================================================
+
+Depois da implementação:
+
+rode:
+
+npm run build
+
+Se houver erros:
+
+corrija.
+
+Depois rode lint/typecheck se existirem scripts.
+
+Não finalize deixando:
+
+- imports quebrados;
+- erros TypeScript;
+- componentes antigos não utilizados;
+- CSS duplicado;
+- páginas visualmente inconsistentes.
+
+==================================================
+48. RESULTADO QUE ESPERO
+==================================================
+
+Quando eu abrir:
+
+http://localhost:3000
+
+eu NÃO quero mais ver:
+
+texto grande isolado no topo
++
+um card simples perdido no canto
++
+90% da tela vazia.
+
+Quero imediatamente perceber:
+
+"isso é o cardápio digital da Jantinha do Rogério."
+
+No celular deve parecer uma experiência de restaurante profissional.
+
+Quando eu abrir:
+
 /admin
-↓
-produtos
-↓
-adiciona/edita/remove item
-↓
-altera preço/foto/disponibilidade
-↓
-salva
-↓
-alteração aparece no cardápio público
+
+eu NÃO quero mais ver:
+
+navbar horizontal simples
++
+texto
++
+lista básica.
+
+Quero perceber:
+
+"isso é um painel profissional de gerenciamento."
+
+Mantenha a identidade da mesma aplicação, mas diferencie:
+
+CARDÁPIO:
+emocional / visual / comida / fotografia
+
+ADMIN:
+funcional / organizado / rápido
 
 ==================================================
-33. QUALIDADE DO CÓDIGO
+49. IMPORTANTE SOBRE ALTERAÇÕES
 ==================================================
 
-Quero código de produção.
+Você tem autorização para alterar/refatorar:
 
-Não quero apenas uma demonstração visual.
+- JSX;
+- TSX;
+- CSS;
+- Tailwind;
+- layouts;
+- componentes;
+- organização frontend;
+- componentes compartilhados.
 
-Implemente realmente:
+NÃO altere a modelagem do banco ou APIs apenas por preferência arquitetural.
 
-- banco;
-- Prisma;
-- CRUD;
-- autenticação;
-- upload;
-- validação;
-- interface pública;
-- interface administrativa.
+Preserve tudo que já funciona.
 
-Evite componentes gigantes.
-
-Separe responsabilidades.
-
-Use Server Components onde fizer sentido e Client Components somente quando necessário.
-
-Evite useEffect desnecessário.
-
-Utilize tipagem TypeScript corretamente.
-
-Não utilize any sem necessidade.
+Caso encontre algum problema no backend necessário para o novo frontend funcionar, explique primeiro antes de fazer uma alteração estrutural.
 
 ==================================================
-34. ORDEM DE IMPLEMENTAÇÃO
+50. EXECUTE
 ==================================================
 
-Antes de codificar:
+Agora:
 
-1. Analise todos os requisitos.
-2. Verifique a estrutura atual do projeto.
-3. Crie um plano de implementação.
-4. Apresente resumidamente a arquitetura que será utilizada.
-5. Depois execute.
-
-Implemente nesta ordem:
-
-FASE 1
-- configuração do projeto;
-- Prisma;
-- PostgreSQL;
-- schema;
-- migrations;
-- variáveis de ambiente.
-
-FASE 2
-- autenticação;
-- login;
-- proteção /admin.
-
-FASE 3
-- CRUD categorias.
-
-FASE 4
-- Cloudinary;
-- CRUD produtos;
-- upload de fotos.
-
-FASE 5
-- configurações.
-
-FASE 6
-- cardápio público completo.
-
-FASE 7
-- refinamento responsivo;
-- loading;
-- erros;
-- empty states;
-- acessibilidade.
-
-FASE 8
-- revisão geral;
-- build;
-- correção de erros TypeScript;
-- correção de lint;
-- documentação.
-
-==================================================
-35. FINALIZAÇÃO
-==================================================
-
-Quando terminar:
-
-- rode o build;
-- corrija todos os erros;
-- verifique imports;
-- verifique TypeScript;
-- verifique Prisma;
-- verifique responsividade;
-- verifique autenticação;
-- verifique CRUD;
-- verifique upload;
-- verifique cardápio público.
-
-Também crie um README explicando:
-
-1. como instalar;
-2. como configurar PostgreSQL;
-3. como preencher .env;
-4. como configurar Cloudinary;
-5. como executar migrations;
-6. como criar o admin inicial;
-7. como rodar localmente;
-8. como fazer deploy na Vercel.
-
-Não encerre o trabalho deixando TODOs essenciais.
-
-Se alguma decisão técnica precisar ser tomada durante o desenvolvimento, escolha a solução mais simples, segura e sustentável sem aumentar desnecessariamente o escopo.
+- analise o projeto atual;
+- apresente rapidamente o plano;
+- implemente a refatoração completa;
+- não apenas sugira código;
+- edite os arquivos de fato;
+- teste;
+- rode build;
+- corrija os erros;
+- entregue a interface finalizada.

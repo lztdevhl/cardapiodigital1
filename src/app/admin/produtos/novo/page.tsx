@@ -1,3 +1,26 @@
-import {redirect} from "next/navigation";import {prisma} from "@/lib/prisma";import {cloudinary} from "@/lib/cloudinary";
-async function save(f:FormData){"use server";const file=f.get("image") as File,name=String(f.get("name")).trim(),price=Math.round(Number(String(f.get("price")).replace(",","."))*100);if(!name||price<1||!file?.size)return;const b=Buffer.from(await file.arrayBuffer());const imageUrl=await new Promise<string>((ok,no)=>cloudinary.uploader.upload_stream({folder:"jantinha",resource_type:"image"},(e,r)=>e?no(e):ok(r!.secure_url)).end(b));await prisma.product.create({data:{name,description:String(f.get("description")),priceCents:price,imageUrl,categoryId:String(f.get("categoryId")),available:true,featured:f.get("featured")==="on"}});redirect("/admin/produtos")}
-export default async function Page(){const cats=await prisma.category.findMany({where:{active:true}});return <main className="container py-10"><h1 className="text-3xl">Novo produto</h1><form action={save} className="mt-6 grid max-w-xl gap-4"><input className="field" name="name" placeholder="Nome" required/><textarea className="field" name="description" placeholder="Descricao"/><input className="field" name="price" placeholder="Preco" required/><select className="field" name="categoryId" required>{cats.map(c=><option value={c.id} key={c.id}>{c.name}</option>)}</select><input className="field" name="image" type="file" accept="image/*" required/><label><input name="featured" type="checkbox"/> Destaque</label><button className="btn">Salvar produto</button></form></main>}
+import {redirect} from "next/navigation";
+import {prisma} from "@/lib/prisma";
+import {revalidatePath} from "next/cache";
+import {ProductForm} from "@/components/admin/product-form";
+import {saveProductImage} from "@/lib/product-image";
+
+async function save(formData:FormData){
+  "use server";
+  const file=formData.get("image") as File;
+  const name=String(formData.get("name")??"").trim();
+  const priceCents=Math.round(Number(String(formData.get("price")??"").replace(",","."))*100);
+  if(!name||!Number.isFinite(priceCents)||priceCents<1||!file?.size)return;
+  let categoryId=String(formData.get("categoryId")??"");
+  if(!categoryId){
+    const general=await prisma.category.upsert({where:{slug:"geral"},update:{active:true},create:{name:"Geral",slug:"geral",active:true}});
+    categoryId=general.id;
+  }
+  const imageUrl=await saveProductImage(file);
+  await prisma.product.create({data:{name,description:String(formData.get("description")??"").trim(),priceCents,imageUrl,categoryId,available:formData.get("available")==="on",featured:formData.get("featured")==="on"}});
+  revalidatePath("/");redirect("/admin/produtos");
+}
+
+export default async function Page(){
+  const categories=await prisma.category.findMany({where:{active:true},orderBy:{order:"asc"}});
+  return <main className="admin-container admin-page"><ProductForm action={save} categories={categories}/></main>;
+}
