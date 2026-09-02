@@ -1,0 +1,5 @@
+"use client";
+import Image from "next/image";
+import {useEffect,useState} from "react";
+import {ImagePlus} from "lucide-react";
+export function ImageUpload({required=true,defaultImage}:{required?:boolean;defaultImage?:string}){const [preview,setPreview]=useState(defaultImage??"");useEffect(()=>()=>{if(preview.startsWith("blob:"))URL.revokeObjectURL(preview)},[preview]);return <div className="upload-zone">{preview?<Image src={preview} fill unoptimized={preview.startsWith("blob:")} alt="Prévia da foto do produto" className="object-cover"/>:<div className="grid justify-items-center gap-2 p-6"><ImagePlus size={30} className="text-[var(--primary)]"/><strong>Adicionar foto</strong><span className="text-xs text-[var(--muted)]">JPG, PNG, WEBP ou GIF · até 5 MB</span></div>}<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required={required} aria-label="Adicionar foto do produto" onChange={event=>{const file=event.target.files?.[0];if(file)setPreview(URL.createObjectURL(file))}}/><span className="absolute bottom-3 right-3 rounded-lg bg-black/70 px-3 py-2 text-xs font-bold">{preview?"Trocar imagem":"Escolher arquivo"}</span></div>}

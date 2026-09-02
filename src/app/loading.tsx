@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="site-container py-12" aria-label="Carregando cardápio"><div className="mb-10 h-40 animate-pulse rounded-2xl bg-[var(--surface)]"/><div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{Array.from({length:6},(_,index)=><div className="h-40 animate-pulse rounded-xl bg-[var(--surface)]" key={index}/>)}</div></main>}

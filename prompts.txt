@@ -1,0 +1,666 @@
+PRECISO COLOCAR ESTE PROJETO EM PRODUÇÃO NA VERCEL AGORA.
+
+Sua única prioridade nesta tarefa é:
+
+FAZER O DEPLOY FUNCIONAR E DEIXAR O SITE ONLINE SEM ERRO 500.
+
+Não refatore frontend.
+Não altere design.
+Não adicione funcionalidades.
+Não reorganize arquitetura por preferência.
+Não faça melhorias que não sejam necessárias para produção.
+
+Quero resolver SOMENTE:
+
+Vercel
+PostgreSQL online
+Prisma
+Environment Variables
+Migrations
+Seed
+Build
+Deploy
+Runtime
+
+==================================================
+CONTEXTO ATUAL
+==================================================
+
+Projeto:
+
+Jantinha do Rogério
+
+Stack:
+
+Next.js
+TypeScript
+Prisma 6.19.3
+PostgreSQL
+Vercel
+Cloudinary
+
+O projeto funciona localmente.
+
+O build local já passou anteriormente.
+
+Existe um Prisma Postgres ONLINE criado e conectado à Vercel.
+
+A Vercel possui variáveis parecidas com:
+
+DATABASE_URL
+DATABASE_POSTGRES_URL
+DATABASE_PRISMA_DATABASE_URL
+
+ou equivalentes criadas pela integração Prisma Postgres.
+
+O projeto espera EXATAMENTE:
+
+DATABASE_URL
+
+no schema Prisma.
+
+Já ocorreram estes erros em produção:
+
+ERRO 1:
+
+PrismaClientInitializationError
+
+DATABASE_URL resolved to an empty string.
+
+Depois isso foi parcialmente corrigido.
+
+ERRO ATUAL:
+
+PrismaClientKnownRequestError
+code P2021
+
+The table `public.Category` does not exist in the current database.
+
+Isso indica que:
+
+- Vercel está executando a aplicação;
+- Prisma está conseguindo acessar um PostgreSQL;
+- mas o schema/migrations ainda não foi corretamente aplicado ao banco de produção.
+
+Também descobrimos que em determinado momento DATABASE_URL estava usando:
+
+file:./dev.db
+
+Isso NÃO pode acontecer em Production.
+
+==================================================
+OBJETIVO FINAL
+==================================================
+
+Quero terminar esta tarefa com:
+
+https://cardapioj.vercel.app
+
+abrindo normalmente.
+
+E também:
+
+https://cardapioj.vercel.app/admin/login
+
+abrindo normalmente.
+
+Sem:
+
+"This page couldn't load"
+
+Sem:
+
+500
+
+Sem:
+
+P2021
+
+Sem:
+
+DATABASE_URL inválida.
+
+Também quero conseguir:
+
+- entrar no /admin;
+- criar categoria;
+- criar produto;
+- cadastrar preço;
+- fazer upload de foto;
+- atualizar a página;
+- manter os dados persistidos.
+
+==================================================
+REGRA MAIS IMPORTANTE
+==================================================
+
+EXECUTE AS CORREÇÕES.
+
+Não quero apenas uma explicação de como fazer.
+
+Você está rodando no terminal do projeto.
+
+Utilize os comandos necessários.
+
+Porém NÃO execute ações destrutivas.
+
+É PROIBIDO:
+
+prisma migrate reset
+prisma db push --force-reset
+DROP DATABASE
+DROP TABLE
+apagar migrations
+apagar produção
+
+Não apague dev.db.
+
+Não apague meu .env local.
+
+Não altere dados existentes sem necessidade.
+
+==================================================
+FASE 1 — ANALISAR ESTADO ATUAL
+==================================================
+
+Primeiro verifique rapidamente:
+
+package.json
+prisma/schema.prisma
+prisma/migrations
+prisma/seed.*
+scripts/check-production-env.*
+.env.example
+.gitignore
+.vercel/project.json
+
+Confirme os scripts existentes:
+
+check:prod
+db:deploy
+db:seed
+build
+postinstall
+
+Confirme que schema.prisma utiliza:
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+Se já estiver assim:
+
+NÃO ALTERE.
+
+==================================================
+FASE 2 — VERCEL CLI
+==================================================
+
+Verifique:
+
+vercel --version
+
+Verifique se o projeto local está vinculado.
+
+Se necessário:
+
+vercel link
+
+O projeto correto é:
+
+cardapioj
+
+Não crie outro projeto na Vercel.
+
+Não crie outro deployment/project separado.
+
+Utilize o projeto existente.
+
+==================================================
+FASE 3 — VARIÁVEIS DA VERCEL
+==================================================
+
+Inspecione as variáveis de Production disponíveis usando a Vercel CLI.
+
+NÃO imprima valores secretos.
+
+Quero apenas identificar os NOMES existentes.
+
+Verifique principalmente:
+
+DATABASE_URL
+DATABASE_POSTGRES_URL
+DATABASE_PRISMA_DATABASE_URL
+SESSION_SECRET
+ADMIN_EMAIL
+ADMIN_PASSWORD
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+
+==================================================
+DATABASE_URL
+==================================================
+
+DATABASE_URL em Production DEVE ser uma URL PostgreSQL real.
+
+Aceitar:
+
+postgres://...
+
+ou:
+
+postgresql://...
+
+REJEITAR:
+
+file:./dev.db
+localhost
+127.0.0.1
+string vazia
+
+Se DATABASE_URL estiver incorreta, mas existir outra variável da integração Prisma contendo uma URL PostgreSQL válida, como:
+
+DATABASE_POSTGRES_URL
+
+ou
+
+DATABASE_PRISMA_DATABASE_URL
+
+utilize essa URL como origem para corrigir DATABASE_URL.
+
+IMPORTANTE:
+
+NÃO imprima a URL.
+
+NÃO mostre username.
+
+NÃO mostre senha/token.
+
+Faça a atualização utilizando a Vercel CLI.
+
+ANTES de inventar qualquer comando de Vercel CLI:
+
+rode o --help correspondente e utilize a sintaxe suportada pela versão instalada.
+
+Não suponha comandos.
+
+==================================================
+FASE 4 — PULL DO ENVIRONMENT
+==================================================
+
+Depois de garantir DATABASE_URL correta na Vercel Production:
+
+remova apenas o arquivo temporário se existir:
+
+.env.production.local
+
+NÃO remover .env.
+
+Depois execute:
+
+vercel env pull .env.production.local --environment=production
+
+Confirme sem imprimir secrets que:
+
+DATABASE_URL existe.
+
+E confirme programaticamente que começa por:
+
+postgres://
+
+ou:
+
+postgresql://
+
+Se não começar:
+
+NÃO execute migration.
+
+Corrija primeiro.
+
+==================================================
+FASE 5 — CHECK DE PRODUÇÃO
+==================================================
+
+Execute:
+
+npx dotenv-cli -e .env.production.local -- npm run check:prod
+
+Se houver erro:
+
+corrija a configuração correspondente.
+
+Se faltar SESSION_SECRET:
+
+gere um valor criptograficamente seguro com Node crypto e configure na Vercel Production.
+
+NÃO imprima o secret na resposta.
+
+Se ADMIN_EMAIL ou ADMIN_PASSWORD já existirem:
+
+preserve.
+
+NÃO troque minhas credenciais administrativas.
+
+Se Cloudinary estiver ausente:
+
+não invente credenciais.
+
+Informe claramente quais valores externos faltam.
+
+Mas continue resolvendo tudo que não depender dessas credenciais.
+
+Objetivo:
+
+Production environment OK
+
+==================================================
+FASE 6 — PRISMA GENERATE
+==================================================
+
+Execute:
+
+npx prisma generate
+
+Tem que completar sem erros.
+
+==================================================
+FASE 7 — MIGRATION DE PRODUÇÃO
+==================================================
+
+Este é um PostgreSQL NOVO criado para esta aplicação.
+
+O erro atual é:
+
+P2021
+public.Category does not exist
+
+Portanto aplique as migrations existentes utilizando o ambiente de Production:
+
+npx dotenv-cli -e .env.production.local -- npm run db:deploy
+
+Isso deve executar:
+
+prisma migrate deploy
+
+NÃO utilize:
+
+migrate dev
+
+NÃO utilize:
+
+db push
+
+NÃO utilize:
+
+migrate reset
+
+Se funcionar:
+
+continue.
+
+Se falhar:
+
+leia o erro completo.
+
+Corrija somente o problema necessário.
+
+Não destrua o banco.
+
+==================================================
+FASE 8 — VERIFICAR TABELAS
+==================================================
+
+Depois da migration, valide que o schema foi aplicado.
+
+Utilize Prisma ou consulta segura para confirmar a existência das tabelas necessárias.
+
+Esperadas conforme schema atual, provavelmente:
+
+Admin
+Category
+Product
+RestaurantSettings
+
+Não assuma nomes.
+
+Leia schema.prisma.
+
+O importante é confirmar que Category existe.
+
+==================================================
+FASE 9 — SEED DO ADMIN
+==================================================
+
+Execute:
+
+npx dotenv-cli -e .env.production.local -- npm run db:seed
+
+O seed deve utilizar:
+
+ADMIN_EMAIL
+ADMIN_PASSWORD
+
+já configurados na Vercel.
+
+Não pedir confirmação.
+
+Não solicitar interação.
+
+Não mostrar senha.
+
+Não criar produtos fake.
+
+Não criar categorias fake.
+
+Confirme apenas que o administrador foi criado/atualizado.
+
+==================================================
+FASE 10 — BUILD
+==================================================
+
+Execute:
+
+npm run build
+
+Se falhar:
+
+corrija.
+
+Não faça deploy enquanto build estiver quebrado.
+
+Também execute:
+
+npm run typecheck
+
+se existir.
+
+==================================================
+FASE 11 — DEPLOY
+==================================================
+
+Quando:
+
+DATABASE_URL válida
+check:prod aprovado
+migration aplicada
+seed aplicado
+build aprovado
+
+execute:
+
+vercel --prod
+
+Utilize o projeto já vinculado:
+
+cardapioj
+
+Espere o deployment terminar.
+
+==================================================
+FASE 12 — TESTE REAL DO SITE
+==================================================
+
+Depois do deployment, teste:
+
+https://cardapioj.vercel.app
+
+e:
+
+https://cardapioj.vercel.app/admin/login
+
+Utilize curl, Invoke-WebRequest ou ferramenta equivalente.
+
+O `/` precisa retornar resposta válida e NÃO HTTP 500.
+
+O `/admin/login` precisa retornar resposta válida e NÃO HTTP 500.
+
+Redirects normais de autenticação são aceitáveis.
+
+==================================================
+FASE 13 — SE AINDA HOUVER ERRO
+==================================================
+
+Se o site continuar mostrando:
+
+"This page couldn't load"
+
+NÃO pare.
+
+Consulte os Runtime Logs da deployment atual utilizando Vercel CLI se disponível.
+
+Identifique o erro real.
+
+Resolva.
+
+Refaça build/deploy se necessário.
+
+Continue até eliminar o erro 500.
+
+==================================================
+FASE 14 — TESTE DO BANCO
+==================================================
+
+Depois que `/` funcionar:
+
+faça uma consulta segura usando Prisma para confirmar:
+
+prisma.category.findMany()
+
+não produz mais P2021.
+
+Não crie dados fake apenas para testar.
+
+==================================================
+NÃO ALTERAR
+==================================================
+
+Não mexer no frontend.
+
+Não mexer nas cores.
+
+Não mexer na logo.
+
+Não mexer em layout.
+
+Não mexer nos componentes visuais.
+
+Não mexer no comportamento do cardápio.
+
+Não criar sistema de pedido.
+
+Não alterar modelo de negócio.
+
+==================================================
+SEGREDOS
+==================================================
+
+NUNCA exiba na resposta:
+
+DATABASE_URL completa
+senha PostgreSQL
+SESSION_SECRET
+ADMIN_PASSWORD
+CLOUDINARY_API_SECRET
+
+Se precisar mencionar:
+
+DATABASE_URL: configurada ✅
+
+e não o valor.
+
+==================================================
+SUCESSO
+==================================================
+
+Considere esta tarefa concluída SOMENTE quando:
+
+[ ] DATABASE_URL de Production for PostgreSQL
+[ ] check:prod passar
+[ ] Prisma Client gerar
+[ ] migrations forem aplicadas
+[ ] Category existir
+[ ] seed funcionar
+[ ] npm run build passar
+[ ] deployment Production ficar Ready
+[ ] cardapioj.vercel.app abrir sem erro
+[ ] /admin/login abrir sem erro
+[ ] não existir P2021 nos testes
+
+==================================================
+SE ALGO EXTERNO ESTIVER FALTANDO
+==================================================
+
+Somente pare se for algo que você realmente NÃO pode obter do projeto/Vercel.
+
+Exemplo:
+
+credenciais Cloudinary inexistentes.
+
+Nesse caso:
+
+termine TODO o restante primeiro.
+
+Depois me diga SOMENTE:
+
+AÇÃO MANUAL NECESSÁRIA:
+<o que falta>
+
+ONDE:
+<caminho exato>
+
+Não me entregue 20 passos.
+
+==================================================
+RESPOSTA FINAL
+==================================================
+
+Quando terminar, responda somente:
+
+DEPLOY
+✅ ou ❌
+
+DATABASE
+✅ ou ❌
+
+MIGRATIONS
+✅ ou ❌
+
+ADMIN
+✅ ou ❌
+
+BUILD
+✅ ou ❌
+
+SITE
+✅ ou ❌
+
+URL:
+https://cardapioj.vercel.app
+
+PENDÊNCIA MANUAL:
+Somente se realmente existir.
+
+Agora execute.

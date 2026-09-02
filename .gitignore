@@ -1,0 +1,14 @@
+node_modules
+.next
+.vercel
+.env
+.env.local
+.env.*.local
+!.env.example
+*.log
+*.tsbuildinfo
+prisma/*.db
+prisma/*.db-journal
+public/uploads/
+.env*
+!.env.example
